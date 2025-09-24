@@ -4,6 +4,12 @@ Welcome to my repository showcasing the use of [**Kusto Query Language (KQL)**](
 
 ## 🎬 Teaser
 
+
+https://github.com/user-attachments/assets/1e65eb09-724b-4a4c-b4d0-0ba3ce4387b5
+
+
+
+
 https://github.com/tezzytezzy/graphical-financial-data-analysis/blob/main/Video%20Demos/sample.mp4  
 
 ![fdfd](https://github.com/tezzytezzy/graphical-financial-data-analysis/blob/main/sample.jpg)  
