@@ -1,0 +1,39 @@
+// Need to put all nodes and edges together
+let accountNode = view() { 
+    LDBC_FIN_Account
+    | project node_id, lbl=strcat(node_id, " (", accoutType, ")"), type=lbl, props=pack_all(true)
+};    
+let companyNode = view() {
+    LDBC_FIN_Company
+    |project node_id, lbl=companyName, type=lbl, props=pack_all(true)
+};
+let personNode = view() {
+    LDBC_FIN_Person
+    |project node_id, lbl=personName, type=lbl, props=pack_all(true)
+};  
+let combinedNodes = view() {
+    accountNode | union personNode | union companyNode
+};
+let accountTrasferAccountEdge = view() {
+    LDBC_FIN_AccountTransferAccount
+    | project source,
+                target,
+                lbl=strcat("$", amount, " (", payType, ") at ", replace_regex(tostring(createTime), @'(\d{4})-(\d{2})-(\d{2})T(\d{2}:\d{2}:\d{2})\.\d+Z', @'\1-\2-\3 \4 (UTC)')),
+                createTime=todatetime(createTime),
+                props=pack_all(true)
+};
+let companyOwnAccountEdge = view() {
+    LDBC_FIN_CompanyOwnAccount
+    | project source, target, lbl, createTime, props=pack_all(true)
+};
+let personOwnAccountEdge= view() {
+    LDBC_FIN_PersonOwnAccount
+    | project source, target, lbl, createTime, props=pack_all(true)
+};
+let combinedEdges = view() {
+    accountTrasferAccountEdge | union companyOwnAccountEdge | union personOwnAccountEdge
+};
+combinedEdges
+| make-graph source --> target with combinedNodes on node_id
+
+  

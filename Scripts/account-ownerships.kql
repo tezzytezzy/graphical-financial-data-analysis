@@ -1,0 +1,44 @@
+let accountNode = view() { 
+    LDBC_FIN_Account
+    | project
+            node_id,
+            lbl=strcat(accountId, " (", accoutType, ")"),
+            type=lbl,
+            props=bag_pack_columns(createTime, accoutType, nickname, phonenum, email, freqLoginType, lastLoginTime, accountLevel) // pack_all(true)
+};    
+let companyNode = view() {
+    LDBC_FIN_Company
+    |project
+        node_id,
+        lbl=companyName,
+        type=lbl,
+        props=bag_pack_columns(createTime, city, country, business, description, url) // pack_all(true)
+};
+let personNode = view() {
+    LDBC_FIN_Person
+    |project
+        node_id,
+        lbl=personName,
+        type=lbl,
+        props=bag_pack_columns(createTime, city, country, gender, birthday) // pack_all(true)
+};  
+let combinedNodes = view() {
+    accountNode | union personNode | union companyNode
+};
+let personOwnAccountEdge = view() {
+    LDBC_FIN_PersonOwnAccount
+    | project source, target, lbl //, props=pack_all(true)
+};
+let companyOwnAccountEdge = view() {
+    LDBC_FIN_CompanyOwnAccount
+    | project source, target, lbl //, props=pack_all(true)
+};
+let personInvestCompanyEdge = view() {
+    LDBC_FIN_PersonInvestCompany
+    | project source, target, lbl //, props=pack_all(true)
+};
+let combinedOwnAccountEdges = view() {
+    personOwnAccountEdge | union companyOwnAccountEdge | union personInvestCompanyEdge
+};
+combinedOwnAccountEdges
+| make-graph source --> target with combinedNodes on node_id
