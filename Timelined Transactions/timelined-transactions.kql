@@ -1,0 +1,39 @@
+LDBC_FIN_Person
+| project
+    person_id=node_id,
+    personName,
+    country,
+    city
+| join kind=innerunique LDBC_FIN_PersonOwnAccount
+    on $left.person_id==$right.source
+| project-away
+    personId,
+    accountId,
+    createTime,
+    lbl,
+    source
+| project-rename
+    owned_account_id=target
+| join kind=innerunique LDBC_FIN_AccountTransferAccount
+    on $left.owned_account_id == $right.target // not $right.source because we want to see the received money 
+| project-away
+    fromId,
+    toId,
+    orderNum,
+    target,
+    lbl
+| project-rename
+    transfer_time=createTime,
+    from_account_id=source
+| project-reorder
+    person_id,
+    personName,
+    country,
+    city,
+    from_account_id,
+    owned_account_id,
+    payType,
+    goodsType,
+    amount,
+    transfer_time,
+    comment
