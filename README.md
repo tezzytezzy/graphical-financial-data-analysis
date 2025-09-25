@@ -48,6 +48,7 @@ To use the scripts, ensure you have access to a KQL-compatible environment (e.g.
 
 - [Kusto.Explorer Installation and UI](https://learn.microsoft.com/en-us/kusto/tools/kusto-explorer?view=microsoft-fabric)
 - [Azure Data Explorer Documentation](https://learn.microsoft.com/en-us/azure/data-explorer/)
+- [Help cluster](https://learn.microsoft.com/en-us/azure/data-explorer/web-ui-samples-query)
 
 ## 📚 References
 
